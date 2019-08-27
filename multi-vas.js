@@ -209,14 +209,11 @@ template.innerHTML = `
          grid-column-gap: 20px;
          justify-items: left;
 ">
-
 </div>
-
 <div class="container_row">
-
 </div>
-
 <slot></slot>
+
 `;
 
 
@@ -232,15 +229,17 @@ class MultiVas extends HTMLElement {
   connectedCallback(){
     let notClicked = true
 
-    this.items.map(( { name, url, background, id, value, min, max, step }, index ) => {
+    this.items.map(( { name, url, background, id, value }, index ) => {
 
       const slider = document.createElement('input')
       slider.type = 'range'
       slider.classList.add('sliderLayer')
       slider.id = id
+      slider.name = name
       slider.min = this.getAttribute('min')
       slider.max = this.getAttribute('max')
       slider.step = this.getAttribute('step')
+
       this._shadowRoot.querySelector('.container_row').appendChild(slider)
 
       // Add a custom style of thumbs to CSS
