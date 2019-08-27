@@ -235,12 +235,18 @@ class MultiVas extends HTMLElement {
       slider.type = 'range'
       slider.classList.add('sliderLayer')
       slider.id = id
-      slider.name = name
       slider.min = this.getAttribute('min')
       slider.max = this.getAttribute('max')
       slider.step = this.getAttribute('step')
 
       this._shadowRoot.querySelector('.container_row').appendChild(slider)
+
+      const hidden_input = document.createElement('input')
+      hidden_input.type = 'hidden'
+      hidden_input.name  = name
+      hidden_input.classList.add('hidden_input')
+      hidden_input.id  = 'hidden_' + id
+      document.querySelector('multi-vas').appendChild(hidden_input)
 
       // Add a custom style of thumbs to CSS
       this._shadowRoot.querySelector('style').innerHTML +=
@@ -286,12 +292,19 @@ class MultiVas extends HTMLElement {
           this.items.filter(v => v.id == activeSlider.id)[0].value = e.target.value
         }
 
+
         activeSlider.classList.add('active')
         activeSlider.classList.add('visible')
         activeSlider.classList.add(this.items.filter(v => v.id == activeSlider.id)[0].name)
 
+        let current_hidden_input = document.querySelector(`#hidden_${activeSlider.id}`)
+        current_hidden_input.value = this.items.filter(v => v.id == activeSlider.id)[0].value
+
         this._shadowRoot.querySelector(`#${activeSlider.id}`).value = this.items.filter(v => v.id == activeSlider.id)[0].value
         this._shadowRoot.querySelector(`#${slider.id}`).value = this.items.filter(v => v.id == slider.id)[0].value
+
+        // console.log('this.items', this.items.map(i => i.value))
+        // console.log('hidden items', Array.from(document.querySelectorAll(".hidden_input")).map(i => i.value))
 
         const currentButton = this._shadowRoot.querySelector(`#${'btn_' + activeSliderId}`)
         this._shadowRoot.querySelectorAll('.sliderLayer').forEach(otherslider => {
