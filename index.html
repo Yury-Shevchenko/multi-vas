@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Web component & VAS</title>
+  </head>
+
+  <body>
+
+    <h1>What is tastier?</h1>
+    <br>
+
+    <div>
+      <multi-vas min=0 max=10 step=1>
+      </multi-vas>
+    </div>
+
+    <script>
+      document.querySelector('multi-vas').items = [
+        {
+          id: 'banana',
+          name: 'Banana',
+          background: "url('https://traveltables.com/img/goods/banana.png')",
+        },
+        {
+          id: 'lemon',
+          name: 'Lemon',
+          background: 'red',
+        },
+        {
+          id: 'orange',
+          name: 'Orange',
+          background: "url('https://traveltables.com/img/goods/orange.png')",
+        },
+        {
+          id: 'apple',
+          name: 'Apple',
+          background: 'blue',
+        },
+        {
+          id: 'egg',
+          name: 'Egg',
+          background: 'green',
+        },
+      ]
+    </script>
+    <script src="./node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+    <script src="multi-vas.js"></script>
+
+
+  </body>
+
+</html>
