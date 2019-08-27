@@ -228,6 +228,7 @@ class MultiVas extends HTMLElement {
 
   connectedCallback(){
     let notClicked = true
+    let finishChanging = true
 
     this.items.map(( { name, url, background, id, value }, index ) => {
 
@@ -268,30 +269,38 @@ class MultiVas extends HTMLElement {
           }
         `
 
+      slider.addEventListener('mouseup', (e) => {
+        finishChanging = true
+      })
+
       slider.addEventListener('input', (e) => {
 
         notClicked = true
         let activeSliderId = window.activeSliderId || slider.id
         let activeSlider = window.activeSlider || slider
-
         let isOverlap = this.items.filter(v => v.value == e.target.value && v.id != activeSliderId).length
 
         if (isOverlap){
-          const prevValue = e.target.value
-          this._shadowRoot.querySelector(`#${activeSlider.id}`).value = this.items.filter(v => v.id == activeSlider.id)[0].value
-          this._shadowRoot.querySelectorAll('.sliderLayer').forEach(slider => {
-            slider.style.zIndex = 1
-            slider.classList.remove('active')
-          })
-          activeSliderId = this.items.filter(v => v.value == prevValue)[0].id
-          activeSlider = this._shadowRoot.querySelector(`#${activeSliderId}`)
-          activeSlider.style.zIndex = 2
-          window.activeSliderId = activeSliderId
-          window.activeSlider = activeSlider
+          let difference = e.target.value - this.items.filter(v => v.id == activeSlider.id)[0].value
+          let isBig = Math.abs(difference) > 3
+          if(isBig || finishChanging){
+            const prevValue = e.target.value
+            this._shadowRoot.querySelector(`#${activeSlider.id}`).value = this.items.filter(v => v.id == activeSlider.id)[0].value
+            this._shadowRoot.querySelectorAll('.sliderLayer').forEach(slider => {
+              slider.style.zIndex = 1
+              slider.classList.remove('active')
+            })
+            activeSliderId = this.items.filter(v => v.value == prevValue)[0].id
+            activeSlider = this._shadowRoot.querySelector(`#${activeSliderId}`)
+            activeSlider.style.zIndex = 2
+            window.activeSliderId = activeSliderId
+            window.activeSlider = activeSlider
+            finishChanging = false
+          }
         } else {
           this.items.filter(v => v.id == activeSlider.id)[0].value = e.target.value
+          finishChanging = false
         }
-
 
         activeSlider.classList.add('active')
         activeSlider.classList.add('visible')
@@ -300,11 +309,9 @@ class MultiVas extends HTMLElement {
         let current_hidden_input = document.querySelector(`#hidden_${activeSlider.id}`)
         current_hidden_input.value = this.items.filter(v => v.id == activeSlider.id)[0].value
 
-        this._shadowRoot.querySelector(`#${activeSlider.id}`).value = this.items.filter(v => v.id == activeSlider.id)[0].value
-        this._shadowRoot.querySelector(`#${slider.id}`).value = this.items.filter(v => v.id == slider.id)[0].value
-
-        // console.log('this.items', this.items.map(i => i.value))
-        // console.log('hidden items', Array.from(document.querySelectorAll(".hidden_input")).map(i => i.value))
+        Array.from(this._shadowRoot.querySelectorAll('.sliderLayer')).map(i => {
+          i.value = this.items.filter(v => v.id == i.id)[0].value
+        })
 
         const currentButton = this._shadowRoot.querySelector(`#${'btn_' + activeSliderId}`)
         this._shadowRoot.querySelectorAll('.sliderLayer').forEach(otherslider => {
@@ -375,8 +382,9 @@ class MultiVas extends HTMLElement {
       btnDiv.appendChild(instruction)
       this._shadowRoot.querySelector('.container_buttons').appendChild(btnDiv)
 
-      if(value){
+      if(typeof(value) != 'undefined'){
         slider.value = value
+        hidden_input.value = value
         slider.classList.add('visible')
         slider.classList.add(name)
         this._shadowRoot.querySelector(`#btn_${slider.id}`).disabled = false
@@ -384,7 +392,7 @@ class MultiVas extends HTMLElement {
 
     })
 
-    const firstSliderId = this.items.map(i => i.id)[0]
+    const firstSliderId = this.items.filter(i => typeof(i.value) == 'undefined' ).map(i => i.id)[0]
     this._shadowRoot.querySelector(`#btn_${firstSliderId}`).disabled = false
     this._shadowRoot.querySelector(`#instruction_${firstSliderId}`).innerHTML = 'Click on the slider'
     this._shadowRoot.querySelector(`#${firstSliderId}`).style.zIndex = 2
