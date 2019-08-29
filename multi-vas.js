@@ -6,6 +6,8 @@ let sliderStyle = {
   thumbHeightVisible: '30px',
   thumbWidthVisible: '30px',
   thumbBackgroundColorVisible: 'white',
+  btnWidth: '50px',
+  btnHeight: '50px',
 }
 
 const template = document.createElement('template')
@@ -230,7 +232,7 @@ class MultiVas extends HTMLElement {
     let notClicked = true
     let finishChanging = true
 
-    this.items.map(( { name, url, background, id, value }, index ) => {
+    this.items.map(( { id, name, background, value }, index ) => {
 
       const slider = document.createElement('input')
       slider.type = 'range'
@@ -256,16 +258,19 @@ class MultiVas extends HTMLElement {
             background: ${background};
             background-position: center center;
             background-repeat: no-repeat;
+            background-size: ${sliderStyle.thumbHeightActive} ${sliderStyle.thumbWidthActive};
           }
           input.${name}[type=range]::-moz-range-thumb {
             background: ${background};
             background-position: center center;
             background-repeat: no-repeat;
+            background-size: ${sliderStyle.thumbHeightActive} ${sliderStyle.thumbWidthActive};
           }
           input.${name}[type=range]::-ms-thumb {
             background: ${background};
             background-position: center center;
             background-repeat: no-repeat;
+            background-size: ${sliderStyle.thumbHeightActive} ${sliderStyle.thumbWidthActive};
           }
         `
 
@@ -338,8 +343,8 @@ class MultiVas extends HTMLElement {
       let btn = document.createElement('button')
       btn.classList.add('button')
       btn.disabled = true
-      btn.style.width = '30px'
-      btn.style.height = '30px'
+      btn.style.width = sliderStyle.btnWidth
+      btn.style.height = sliderStyle.btnHeight
       btn.style['box-shadow'] = '0 3px rgb(219, 213, 213)'
       btn.style['border-radius'] = '10px'
       btn.classList.add = 'sliderSelector'
@@ -349,6 +354,7 @@ class MultiVas extends HTMLElement {
       btn.style['background-position'] = 'center center'
       btn.style['background-repeat'] = 'no-repeat'
       btn.style['background-color'] = background
+      btn.style['background-size'] = `${sliderStyle.btnWidth} ${sliderStyle.btnHeight}`
 
       let optionName = document.createElement('span')
       optionName.id = 'name_' + slider.id
