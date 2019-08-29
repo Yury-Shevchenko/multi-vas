@@ -287,8 +287,7 @@ class MultiVas extends HTMLElement {
 
         if (isOverlap){
           let difference = e.target.value - this.items.filter(v => v.id == activeSlider.id)[0].value
-          let isBig = Math.abs(difference) > 3
-          if(isBig || finishChanging){
+          if(finishChanging){
             const prevValue = e.target.value
             this._shadowRoot.querySelector(`#${activeSlider.id}`).value = this.items.filter(v => v.id == activeSlider.id)[0].value
             this._shadowRoot.querySelectorAll('.sliderLayer').forEach(slider => {
