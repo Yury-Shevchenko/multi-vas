@@ -1,13 +1,14 @@
 // slider styles variables
 let sliderStyle = {
   trackHeight: '1px',
-  thumbHeightActive: '30px',
-  thumbWidthActive: '30px',
-  thumbHeightVisible: '30px',
-  thumbWidthVisible: '30px',
+  thumbHeightActive: '50px',
+  thumbWidthActive: '50px',
+  thumbHeightVisible: '50px',
+  thumbWidthVisible: '50px',
   thumbBackgroundColorVisible: 'white',
   btnWidth: '50px',
   btnHeight: '50px',
+  sliderLayerHeight: '100px',
 }
 
 const template = document.createElement('template')
@@ -86,6 +87,12 @@ template.innerHTML = `
       border: 0.2px solid #010101;
     }
 
+    /*hide the outline behind the border*/
+    input[type=range]:-moz-focusring{
+      outline: 2px solid white;
+      outline-offset: -1px;
+    }
+
     input[type=range]::-ms-track {
       width: 100%;
       height: ${sliderStyle.trackHeight};
@@ -122,20 +129,20 @@ template.innerHTML = `
     input.visible[type=range]::-webkit-slider-thumb {
       background: ${sliderStyle.thumbBackgroundColorVisible};
       -webkit-appearance: none;
-      border: 1px solid #000000;
+      /* border: 1px solid #000000; */
       height: ${sliderStyle.thumbHeightVisible};
       width: ${sliderStyle.thumbWidthVisible};
       border-radius: 3px;
       cursor: pointer;
       margin-top: -14px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
-      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; /* Add cool effects to your sliders! */
+      /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; /* Add cool effects to your sliders! */ */
     }
 
     /* All the same stuff for Firefox */
     input.visible[type=range]::-moz-range-thumb {
       background: ${sliderStyle.thumbBackgroundColorVisible};
-      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-      border: 1px solid #000000;
+      /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
+      /* border: 1px solid #000000; */
       height: ${sliderStyle.thumbHeightVisible};
       width: ${sliderStyle.thumbWidthVisible};
       border-radius: 3px;
@@ -145,8 +152,8 @@ template.innerHTML = `
     /* All the same stuff for IE */
     input.visible[type=range]::-ms-thumb {
       background: ${sliderStyle.thumbBackgroundColorVisible};
-      box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-      border: 1px solid #000000;
+      /* box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d; */
+      /* border: 1px solid #000000; */
       height: ${sliderStyle.thumbHeightVisible};
       width: ${sliderStyle.thumbWidthVisible};
       border-radius: 3px;
@@ -182,7 +189,7 @@ template.innerHTML = `
       z-index: 1;
       left: 0;
       top: 0;
-      height: 100px;
+      height: ${sliderStyle.sliderLayerHeight};
     }
 
     .button {
@@ -259,18 +266,21 @@ class MultiVas extends HTMLElement {
             background-position: center center;
             background-repeat: no-repeat;
             background-size: ${sliderStyle.thumbHeightActive} ${sliderStyle.thumbWidthActive};
+            transform: translateY(-${parseInt(sliderStyle.thumbHeightVisible)-14}px);
           }
           input.${name}[type=range]::-moz-range-thumb {
             background: ${background};
             background-position: center center;
             background-repeat: no-repeat;
             background-size: ${sliderStyle.thumbHeightActive} ${sliderStyle.thumbWidthActive};
+            transform: translateY(-${parseInt(sliderStyle.thumbHeightVisible)/2}px);
           }
           input.${name}[type=range]::-ms-thumb {
             background: ${background};
             background-position: center center;
             background-repeat: no-repeat;
             background-size: ${sliderStyle.thumbHeightActive} ${sliderStyle.thumbWidthActive};
+            transform: translateY(-${parseInt(sliderStyle.thumbHeightVisible)/2}px);
           }
         `
 
