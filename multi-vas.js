@@ -261,21 +261,21 @@ class MultiVas extends HTMLElement {
       // Add a custom style of thumbs to CSS
       this._shadowRoot.querySelector('style').innerHTML +=
         `
-          input.${name}[type=range]::-webkit-slider-thumb {
+          input.${id}[type=range]::-webkit-slider-thumb {
             background: ${background};
             background-position: center center;
             background-repeat: no-repeat;
             background-size: ${sliderStyle.thumbHeightActive} ${sliderStyle.thumbWidthActive};
             transform: translateY(-${parseInt(sliderStyle.thumbHeightVisible)-14}px);
           }
-          input.${name}[type=range]::-moz-range-thumb {
+          input.${id}[type=range]::-moz-range-thumb {
             background: ${background};
             background-position: center center;
             background-repeat: no-repeat;
             background-size: ${sliderStyle.thumbHeightActive} ${sliderStyle.thumbWidthActive};
             transform: translateY(-${parseInt(sliderStyle.thumbHeightVisible)/2}px);
           }
-          input.${name}[type=range]::-ms-thumb {
+          input.${id}[type=range]::-ms-thumb {
             background: ${background};
             background-position: center center;
             background-repeat: no-repeat;
@@ -294,9 +294,7 @@ class MultiVas extends HTMLElement {
         let activeSliderId = window.activeSliderId || slider.id
         let activeSlider = window.activeSlider || slider
         let isOverlap = this.items.filter(v => v.value == e.target.value && v.id != activeSliderId).length
-
         if (isOverlap){
-          let difference = e.target.value - this.items.filter(v => v.id == activeSlider.id)[0].value
           if(finishChanging){
             const prevValue = e.target.value
             this._shadowRoot.querySelector(`#${activeSlider.id}`).value = this.items.filter(v => v.id == activeSlider.id)[0].value
@@ -318,7 +316,7 @@ class MultiVas extends HTMLElement {
 
         activeSlider.classList.add('active')
         activeSlider.classList.add('visible')
-        activeSlider.classList.add(this.items.filter(v => v.id == activeSlider.id)[0].name)
+        activeSlider.classList.add(this.items.filter(v => v.id == activeSlider.id)[0].id)
 
         let current_hidden_input = document.querySelector(`#hidden_${activeSlider.id}`)
         current_hidden_input.value = this.items.filter(v => v.id == activeSlider.id)[0].value
@@ -401,9 +399,10 @@ class MultiVas extends HTMLElement {
         slider.value = value
         hidden_input.value = value
         slider.classList.add('visible')
-        slider.classList.add(name)
+        slider.classList.add(id)
         this._shadowRoot.querySelector(`#btn_${slider.id}`).disabled = false
       }
+
 
     })
 
